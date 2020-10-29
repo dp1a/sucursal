@@ -1,0 +1,32 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    restart: always
+    container_name: postgres
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: welcome1
+  
+  ms:
+    #image: java:8
+    container_name: ms-sucursal
+    build: .
+    depends_on:
+      - db
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: welcome1
+    #volumes:
+    #  - .:/usr/src/ms-sucursal
+    #working_dir: /usr/src/ms-sucursal
+    #command: ./mvnw spring-boot:run #&& java -jar -XX:+UseG1GC -Xms256m -Xmx1024m -Xss1m target/sucursal-0.0.1-SNAPSHOT.jar
+      
